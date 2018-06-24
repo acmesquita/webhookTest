@@ -24,8 +24,17 @@ class WebhooksController < ApplicationController
   # POST /webhooks
   # POST /webhooks.json
   def create
-    @webhook = Webhook.new(webhook_params)
 
+    puts "############################INICIO##########################################"
+    byebug    
+    repo = params.require(:issue).require(:repository_url)
+    login = params.require(:issue).require(:user).require(:login)
+    byebug
+    @webhook = Webhook.new()
+    @webhook.repo = repo
+    @webhook.login = login
+    
+    byebug
     respond_to do |format|
       if @webhook.save
         format.html { redirect_to @webhook, notice: 'Webhook was successfully created.' }
@@ -35,6 +44,7 @@ class WebhooksController < ApplicationController
         format.json { render json: @webhook.errors, status: :unprocessable_entity }
       end
     end
+    puts "#############################FIM############################################"
   end
 
   # PATCH/PUT /webhooks/1
